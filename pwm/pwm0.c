@@ -1,9 +1,80 @@
 #include <avr/io.h>
 #include <stdint.h>
 
+/*
+ * EXPLICACION
+ * Los pines que controlan los PWMs son los mismos que los pines
+ * manejados antes. La cosa es que estan indicados en la placa
+ * Arduino por un "~". Para poder activarlos, hay que marcalos como
+ * bits de salida en el registro DDRD, como con pines normales de salida.
+ *
+ * En este micro, los Timer ademas de valer como contadores tambien tienen
+ * la funcion de PWM mediante los modos Fast PWM y Correct Phase PWM. En
+ * este caso se explicara el primero.
+ *
+ * Para este modo se van a tener en cuenta los siguientes registros:
+ * 	* TCNT0: Contador del Timer0, registro de 8 bits.
+ * 	
+ * 	* OCR0A: Registro de 8 bits que, dependiendo del modo tiene una funcion diferente.
+ * 	Ademas, tiene asociado un pin 0C0A.
+ * 	
+ * 	* 0C0A: Pin que corresponde al pin 6 de la placa. Si esta activado el
+ * 	el modo Fast PWM, reemplaza el funcionamiento normal del pin 6.
+ * 	
+ * 	* OCR0B: Registro de 8 bits, cuyo valor almacenado se compara constantemente
+ * 	con el de TCNT0. En caso de que sean iguales el pin 0C0B,
+ * 	que tiene asociado dicho regsitro, cambiara su tension
+ * 	en funcion del comportamiendo que tenga almacenado el registro TCCR0A
+ * 	
+ * 	* TCCR0A: Registro de 8 bits que guarda lo siguiente. Se va a ir
+ * 	mostrando cada pin del mas significativo al menos significativo:
+ * 		- COM0A1
+ * 		- COM0A0
+ * 		- COM0B1
+ * 		- COM0B0
+ * 		- Reservado
+ * 		- Reservado
+ * 		- WGM01
+ * 		- WGM00
+ *
+ * 	COM0A1 COM0A0 forman una combinacion de dos bits, que segun los valores
+ * 	que almacenan el PWM actua de las siguientes maneras:
+ * 		- 0 0: No ocurre nada. El pin 6 actua normal.
+ * 		- 0 1: Cada vez que TCNT0 valga el valor guardado en OCR0A, el pin
+ *		OC0A invertira su seinal. Siempre que el flag WGM02 del registro
+ *		TCCR0B este en alto.
+ *		- 1 0: Cada vez que TCNT0 valga el valor guardado en OCR0A, el pin
+ *		OC0A pondra en bajo su seinal y cuando TCNT0 haga overflow lo pondra
+ *		en alto.
+ *		- 1 1: Cada vez que TCNT0 valga el valor guardado en OCR0A, el pin
+ *		OC0A pondra en alto su seinal y cuando TCNT0 haga overflow lo pondra
+ *		en bajo.
+ *
+ *	COM0B1 COM0B0 forman una combinacion de dos bits, que segun los valores
+ * 	que almacenan el PWM actua de las siguientes maneras:
+ * 		- 0 0: No ocurre nada. El pin 6 actua normal.
+ *		- 0 1: Reservado
+ *		- 1 0: Cada vez que TCNT0 valga el valor guardado en OCR0B, el pin
+ *		OC0B pondra en bajo su seinal y cuando TCNT0 haga overflow lo pondra
+ *		en alto.
+ *		- 1 1: Cada vez que TCNT0 valga el valor guardado en OCR0B, el pin
+ *		OC0B pondra en alto su seinal y cuando TCNT0 haga overflow lo pondra
+ *		en bajo.
+ *
+ *	WGM02 del registro TCCR0B y WGM01 WGM00 del registro TCCR0A forman una
+ *	combinacion de tres bits cuyo valor indica el modo del timer0. Los dos
+ *	valores que indican los modos Fast PWM son los siguientes:
+ *		- 0 1 1: El maximo valor que puede alcanzar el contador TCNT0 es
+ *		0xFF(255). En este modo tanto el OC0A como OC0B funcionan como
+ *		pines del PWM0.
+ *		- 1 1 1: El maximo valor que puede alcanzar el contador TCNT0 lo
+ *		indica OCR0A. Por tanto, el pin asociado OCR0A(OC0A) no puede ser
+ *		usado como pin de PWM, pero el OC0B funciona igual.
+*/ 
+
 int main(void)
 {
-	// Set output PWM pin high ( COMPULSORY )
+	// Set output PWM pins high ( COMPULSORY )
 	DDRD |= 0x60;
 	DDRD &= 0x6F;
 	// 0 1 1 0 _ 0 0 0 0 
