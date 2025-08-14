@@ -70,7 +70,33 @@
  *		- 1 1 1: El maximo valor que puede alcanzar el contador TCNT0 lo
  *		indica OCR0A. Por tanto, el pin asociado OCR0A(OC0A) no puede ser
  *		usado como pin de PWM, pero el OC0B funciona igual.
-*/ 
+ *	* TCCR0B: Registro de 8 bits que guarda lo siguiente. Se va a ir
+ * 	mostrando cada pin del mas significativo al menos significativo:
+ *		- FC0A
+ *		- FC0B
+ *		- Reservado
+ *		- Reservado
+ *		- WGM02
+ *		- CS02
+ *		- CS01
+ *		- CS00
+ *
+ *	Los primeros 4 bits no se utilizan para el PWM.
+ *	WGM02 es el bit de la combinacion WGM02 WGM01 WGM00 que se hace referencia antes.
+ *	CS02 CS01 CS00 es una combinacion de bits que sirve para decidir el reloj en el que 
+ *	TCNT0 contara. Estas son las opciones:
+ *		- 0 0 0: Reloj apagado
+ *		- 0 0 1: Reloj sin prescaler
+ *		- 0 1 0: Reloj con prescaler de 8
+ *		- 0 1 1: Reloj con prescaler de 64
+ *		- 1 0 0: Reloj con prescaler de 256
+ *		- 1 0 1: Reloj con prescaler de 1024
+ *		- 1 1 0: Reloj externo en el pin T0 en flanco de bajada
+ *		- 1 1 1: Reloj externo en el pin T0 en flanco de subida
+ *
+ *	Si no se selecciona el tipo de reloj, no contara el timer. Esto implica a que el
+ *	PWM no funcionara.
+ */ 
 
 int main(void)
 {
