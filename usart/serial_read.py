@@ -1,6 +1,6 @@
 import serial
 
-ser = serial.Serial("/dev/ttyACM0", baudrate=9600)
+ser = serial.Serial("COM3", baudrate=9600)
 
 while True:
    data = ser.readline()

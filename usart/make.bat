@@ -4,7 +4,7 @@ set PROGRAMAS=%USERPROFILE%\Desktop\Programas
 set AVR=%PROGRAMAS%\avr8-gnu-toolchain-win32_x86_64\bin
 set AVRDUDE=%PROGRAMAS%\avrdude
 set MICRO_TARGET=atmega328p
-set FILENAME=adc
+set FILENAME=usart
 
 if "%1"=="" (
 	call :object
@@ -44,7 +44,7 @@ SETLOCAL
 set CC=%AVR%\avr-gcc
 set OUTPUT=%FILENAME%.o
 set INCLUDE=.\include
-set FLAGS=-I$(INCLUDE) -mmcu=%MICRO_TARGET% -o %OUTPUT% -c
+set FLAGS=-I%INCLUDE% -mmcu=%MICRO_TARGET% -o %OUTPUT% -c
 set SRC=%FILENAME%.c
 %CC% %FLAGS% %SRC%
 echo %CC% %FLAGS% %SRC%
