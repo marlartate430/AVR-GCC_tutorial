@@ -43,7 +43,8 @@ if "%1"=="clean" (
 SETLOCAL
 set CC=%AVR%\avr-gcc
 set OUTPUT=%FILENAME%.o
-set FLAGS=-mmcu=%MICRO_TARGET% -o %OUTPUT% -c
+set INCLUDE=.\include
+set FLAGS=-I%INCLUDE% -mmcu=%MICRO_TARGET% -o %OUTPUT% -c
 set SRC=%FILENAME%.c
 %CC% %FLAGS% %SRC%
 echo %CC% %FLAGS% %SRC%
