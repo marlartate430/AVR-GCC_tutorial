@@ -8,6 +8,7 @@ uint8_t previous_events;
 uint8_t events;
 uint8_t states;
 uint8_t saved_value;
+uint8_t current_cant_digits;
 
 custom_bool last_char;
 
@@ -24,8 +25,10 @@ void switch_on_usart(void);
 
 void switch_off_usart(void);
 void switch_on_adc(void);
-
 void start_conversion(void);
+
+uint8_t get_cant_digits(const uint8_t p_number);
+uint8_t get_digit(const uint8_t p_number, const uint8_t p_index);
 
 ISR(ADC_vect)
 {
@@ -126,6 +129,8 @@ void state1(void)
 		events = 0;
 
 		last_char = false;
+
+		current_cant_digits = get_cant_digits(saved_value);
 	}
 }
 
@@ -135,18 +140,16 @@ void state2(void)
 	{
 		if ( !last_char )
 		{
-			uint8_t division = saved_value / 10;
-			
-			if ( division == 0 )
+			if ( current_cant_digits == 0 )
 			{
 				last_char = true;
 				UDR0 = '\n';
 			}
 			else
 			{
-				char current_digit = saved_value % 10;
-			      	saved_value = division;
+				uint8_t current_digit = get_digit(saved_value, current_cant_digits);
 				UDR0 = current_digit + ASCII_OFFSET;
+				current_cant_digits--;
 			}
 		}
 		else
@@ -189,4 +192,32 @@ void start_conversion(void)
 {
 	ADCSRA |= 0x40;
 	// 0 1 0 0 _ 0 0 0 0
+}
+
+uint8_t get_cant_digits(const uint8_t p_number)
+{
+	uint8_t result = 0;
+	uint8_t current_number = p_number;
+
+	while ( current_number != 0 )
+	{
+		current_number = current_number / 10;
+		result++;
+	}
+
+	return result;
+}
+
+uint8_t get_digit(const uint8_t p_number, const uint8_t p_index)
+{
+	uint8_t result = p_number;
+	uint8_t current_index = p_index;
+
+	while ( current_index != 0 )
+	{
+		result = result / 10;
+		current_index--;
+	}
+
+	return result;
 }
