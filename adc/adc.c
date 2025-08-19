@@ -9,6 +9,8 @@ uint8_t events;
 uint8_t states;
 uint8_t saved_value;
 
+custom_bool last_char;
+
 void initialize_adc(void);
 void initialize_usart(void);
 
@@ -22,6 +24,8 @@ void switch_on_usart(void);
 
 void switch_off_usart(void);
 void switch_on_adc(void);
+
+void start_conversion(void);
 
 ISR(ADC_vect)
 {
@@ -46,6 +50,7 @@ int main(void)
 	sei();
 	
 	initialize_adc();
+	start_conversion();
 
 	// by default usart is switched off
 	switch_on_adc();
@@ -119,6 +124,8 @@ void state1(void)
 		switch_on_usart();
 		states = 2;
 		events = 0;
+
+		last_char = false;
 	}
 }
 
@@ -126,17 +133,28 @@ void state2(void)
 {
 	if ( events == 2 )
 	{
-		char current_character = saved_value % 10;
-		current_character += ASCII_OFFSET;
-		saved_value = saved_value / 10;
-		UDR0 = current_character;
-
-		if ( saved_value == 0 )
+		if ( !last_char )
+		{
+			uint8_t division = saved_value / 10;
+			
+			if ( division == 0 )
+			{
+				last_char = true;
+				UDR0 = '\n';
+			}
+			else
+			{
+				char current_digit = saved_value % 10;
+			      	saved_value = division;
+				UDR0 = current_digit + ASCII_OFFSET;
+			}
+		}
+		else
 		{
 			switch_off_usart();
 			switch_on_adc();
 			states = 1;
-			PORTB |= 0x40;
+			start_conversion();
 		}
 
 		events = 0;
@@ -145,8 +163,8 @@ void state2(void)
 
 void switch_off_adc(void)
 {
-	ADCSRA &= 0xBF;
-	// 1 0 1 1 _ 1 1 1 1
+	ADCSRA &= 0x7F;
+	// 0 1 1 1 _ 1 1 1 1
 }
 
 void switch_on_usart(void)
@@ -162,6 +180,12 @@ void switch_off_usart(void)
 }
 
 void switch_on_adc(void)
+{
+	ADCSRA |= 0x80;
+	// 1 0 0 0 _ 0 0 0 0
+}
+
+void start_conversion(void)
 {
 	ADCSRA |= 0x40;
 	// 0 1 0 0 _ 0 0 0 0
