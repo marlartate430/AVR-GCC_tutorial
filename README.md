@@ -31,3 +31,9 @@ Se vuelve a utilizar el timer0, pero esta vez en su modo PWM. As�, el valor que 
 ![](markdown_resources/pwm_schematics.jpg)
 |:--:|
 |Figura 2|
+
+### USART
+Para este caso se ha utilizado ningún puerto. Solo se envía una cadena de caracteres siempre que el USART esté disponible para enviar un caracter. Después, se puede comprobar el mensaje recibido mediante el lector de puerto serie de Arduino.En GNU/Linux es necesario instalar el paquete X.
+
+### ADC
+La forma que se obtiene un valor analógico es mediante un divisor de voltaje, tal y como se muestra en la figura 3.El programa trata de una maquina de dos estados. En el primero, se espera a que el ADC haya terminado; en ese caso se cambia de al siguiente estado. En el segundo, se envía el dato recibido por el conversor mediante el USART al ordenador.
