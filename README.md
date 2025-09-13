@@ -15,5 +15,19 @@ Una alternativa a la anterior forma de compilación y transferencia del ejecutab
 
 ## Práctica
 ### Puertos de salida
-Se trataba de aprender a usar los puertos de salida, conectando un led en dicho puerto, tal y como se muestra en la figura 1. El código se encuentra en la carpeta *led*.
-!(markdown_resources/led_schematic.jpeg)
+Se trata de aprender a usar los puertos de salida, conectando un led en dicho puerto, tal y como se muestra en la figura 1. El código se encuentra en la carpeta *led*.
+![](markdown_resources/led_schematic.jpeg)
+|:--:|
+|Figura1|
+
+> Este circuito **tambien se va a utilizar** en los directorios **Timer**.
+
+### Timer
+Este trata de aprender a manejar el Timer 0 del microcontrolador. Para ello, la luz del led cambia su nivel (encendido o apagado) cada 5 segundos.
+
+### PWM
+Se vuelve a utilizar el timer0, pero esta vez en su modo PWM. As�, el valor que se le asigne en el registro OCR0A se refleja en la intensidad de la luz del led conectado al puerto 6 y el puerto 5 en función del registro 0CR0B. A continuaci�n se mostrará su circuito en la figura 2.
+
+![](markdown_resources/pwm_schematics.jpg)
+|:--:|
+|Figura 2|
