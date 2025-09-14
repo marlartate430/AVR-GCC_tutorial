@@ -60,7 +60,9 @@ void power_on_usart(void)
 
 void send_message(void)
 {
+	#ifndef ARRAY_SIZE
 	#define ARRAY_SIZE 3
+	#endif
 	char possible_letters[ARRAY_SIZE] = { '4', 'K', '\n' };
 	char msg = possible_letters[current_index];
 	

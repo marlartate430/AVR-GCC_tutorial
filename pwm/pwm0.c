@@ -85,7 +85,7 @@
  *		- CS00
  *
  *	Los primeros 4 bits no se utilizan para el PWM.
- *	WGM02 es el bit de la combinacion WGM02 WGM01 WGM00 que se hace referencia antes.
+ *	WGM02 es el bit de la combinacion WGM02 WGM01 WGM00 que se hizo referencia antes.
  *	CS02 CS01 CS00 es una combinacion de bits que sirve para decidir el reloj en el que 
  *	TCNT0 contara. Estas son las opciones:
  *		- 0 0 0: Reloj apagado
@@ -131,6 +131,7 @@ int main(void)
 	/*
 	 * WGM02 : 0 => WGM02 WMG01 WGM00 : 0 1 1 => El maximo
 	 * valor que alcanza el TCNT0 es el maximo, es decir, 255.
+	 * Y el Timer0 esta en modo Fast PWM.
 	 *
 	 * CS02 CS01 CS00 : 0 0 1 => Reloj en funcionamiento
 	 * pero sin prescaler.
