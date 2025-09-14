@@ -21,6 +21,9 @@
  * 	* 0C0A: Pin que corresponde al pin 6 de la placa. Si esta activado el
  * 	el modo Fast PWM, reemplaza el funcionamiento normal del pin 6.
  * 	
+ * 	* 0C0B: Pin que corresponde al pin 5 de la placa. Si esta activado el
+ * 	el modo Fast PWM, reemplaza el funcionamiento normal del pin 5.
+ *
  * 	* OCR0B: Registro de 8 bits, cuyo valor almacenado se compara constantemente
  * 	con el de TCNT0. En caso de que sean iguales el pin 0C0B,
  * 	que tiene asociado dicho regsitro, cambiara su tension
@@ -52,7 +55,7 @@
  *
  *	COM0B1 COM0B0 forman una combinacion de dos bits, que segun los valores
  * 	que almacenan el PWM actua de las siguientes maneras:
- * 		- 0 0: No ocurre nada. El pin 6 actua normal.
+ * 		- 0 0: No ocurre nada. El pin 5 actua normal.
  *		- 0 1: Reservado
  *		- 1 0: Cada vez que TCNT0 valga el valor guardado en OCR0B, el pin
  *		OC0B pondra en bajo su seinal y cuando TCNT0 haga overflow lo pondra
@@ -104,16 +107,49 @@ int main(void)
 	DDRD |= 0x60;
 	DDRD &= 0x6F;
 	// 0 1 1 0 _ 0 0 0 0 
+	// Pines 5(OC0B) y 6(OC0A)
 
 	// Set Timer 0 to Fast PWM
 	TCCR0A |= 0xF3;
 	// 1 1 1 1 _ 0 0 1 1
+	
+	/* COM0A1 COM0A0 : 1 1 => Cada vez que TCNT0 valga
+	 * el valor guardado en OCR0A, el pin OC0A pondra
+	 * en alto su seinal y cuando TCNT0 haga overflow
+	 * lo pondra en bajo.
+	 *
+	 * COM0B1 COM0B0 : 1 1 => Lo mismo que con COM0A1 y
+	 * COM0A0, pero con el pin OC0B.
+	 *
+	 * WGM01 y WGM00 : 1 1 => Se dira mas tarde cuando se
+	 * conozca el valor de WGM02.
+	 */
 
 	TCCR0B |= 0x01;
 	// 0 0 0 0 _ 0 0 0 1
+	
+	/*
+	 * WGM02 : 0 => WGM02 WMG01 WGM00 : 0 1 1 => El maximo
+	 * valor que alcanza el TCNT0 es el maximo, es decir, 255.
+	 *
+	 * CS02 CS01 CS00 : 0 0 1 => Reloj en funcionamiento
+	 * pero sin prescaler.
+	 */ 
 
 	OCR0A = 0x00;
+	/* En cuanto el contador TCNT0 valga 0,
+	 * la seinal OC0A se encendera. Cuando
+	 * el contador llegue al valor maximo,
+	 * en este caso 255, se reiniciara y se
+	 * apagara.
+	 */
 	OCR0B = 0x7F;
+	/* En cuanto el contador valga 128,
+	 * la seinal OC0B se encendera. Cuando
+	 * el contador llegue al valor maximo,
+	 * en este caso 255, se reiniciara y se
+	 * apagara.
+	 */
 
 	// TCCR0A &= 0xFF // We don't know if the reserved bits are set or not and we have to keep the bits of the first digit, so it would result an and of FF, which is the same as not doing anything
 	
