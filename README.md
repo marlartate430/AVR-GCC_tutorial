@@ -1,13 +1,11 @@
-# Tutorial de AVR-GCC en el Atmega328p
+# Tutorial de AVR-GCC en el Atmega328p #
 El motivo del repositorio era practicar la programación en C en microcontroladores. Por disponibilidad, se ha utilizado una placa Arduino UNO R3, que contiene un microcontrolador Atmega328p. En las siguientes cabeceras se mostrarán los periféricos programados con sus respectivos circuitos, además de unos incisos y consejos al principio.
 
 ## Documentación ##
 Se han usado los documentos oficiales de la placa Arduino UNO R3 y el datasheet oficial del Atega328p. También el uso de Chat GPT ha sido de ayuda, **no para generar código** sino para alguna explicación sobre el funcionamiento del dispositivo que ha sido difícil de entender con la documentación ya mencionada. Además, sitios web como StackOverflow han sido de ayuda. Aquí están los enlaces a los datasheets:
-* Arduino UNO R3:
-[](https://docs.arduino.cc/hardware/uno-rev3/?_gl=1*ngoux9*_up*MQ..*_ga*MjEzMzE0NDM4Ny4xNzU3ODQyMTA2*_ga_NEXN8H46L5*czE3NTc4NDIxMDMkbzEkZzEkdDE3NTc4NDIxMTMkajUwJGwwJGg4NjQwMDUyMzM.)<br>
+* [Arduino UNO R3](https://docs.arduino.cc/hardware/uno-rev3/?_gl=1*ngoux9*_up*MQ..*_ga*MjEzMzE0NDM4Ny4xNzU3ODQyMTA2*_ga_NEXN8H46L5*czE3NTc4NDIxMDMkbzEkZzEkdDE3NTc4NDIxMTMkajUwJGwwJGg4NjQwMDUyMzM.)<br>
 
-* Atmega328p:
-[](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf)
+* [Atmega328p](https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf)
 
 ## Inciso ##
 Cada carpeta contiene un código `.c`, con su respectivo script para compilarlo y pasarlo a la placa tanto para GNU/Linux como para Windows. Los siguientes pasos a realizar son los mismos en los sistemas operativos mencionados previamente:<br>
