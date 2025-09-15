@@ -5,6 +5,7 @@
 
 #define TAMANO_RGB 3
 #define OFFSET_PRIMER_PIN 2
+#define OFFSET_ASCII '0'
 
 /*
  * ENUNCIADO: Se va a enviar desde
@@ -23,7 +24,7 @@ ISR(USART_UDRE_vect)
 }
 
 void inicializar_usart(void);
-void encender_led(const uint8_t p_dato)
+void encender_led(const uint8_t p_dato);
 
 int main(void)
 {
@@ -47,21 +48,32 @@ int main(void)
 
 void encender_led(const uint8_t p_dato)
 {
-	const uint8_t dato_restado = p_dato - 1;
-	
+	const uint8_t dato_restado = p_dato - OFFSET_ASCII - OFFSET_PRIMER_PIN;
+
 	if ( dato_restado < TAMANO_RGB )
 	{
 		for ( uint8_t indice = 0; indice < TAMANO_RGB; indice++ )
 		{
+			uint8_t indice_offset_pin = indice + OFFSET_PRIMER_PIN;
+			
 			if ( dato_restado == indice )
 			{
-				PORTD |= ( 1 << ( indice + OFFSET_PRIMER_PIN ) );
+				PORTD |= ( 1 << indice_offset_pin );
 			}
 			else
 			{
-				PORTD |= ~( 1 << ( indice + OFFSET_PRIMER_PIN ) );
+				PORTD &= ~( 1 << indice_offset_pin );
 			}
 		}
+	}
+	else
+	{
+		PORTD &= ~(0x1C);
+		// 0 0 0 1 _ 1 1 0 0
+
+		/* Negada de los pines que se encendenrian, si se hubieran
+		 * presionado sus teclados correspondientes
+		 */
 	}
 }
 
