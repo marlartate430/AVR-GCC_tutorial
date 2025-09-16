@@ -55,7 +55,7 @@ botón de `open`(*figura4*).<br>
 |:--:|
 |Figura 4|
 
-* **GNU/Linux**:<br>
+* **GNU/Linux**: *Falta por explciar. En cuanto se pueda se explicará la forma en este sistema operativo.*<br>
 
 > También se puede utilizar el IDE de Arduino para comunicarse con la placa.
 
@@ -100,6 +100,27 @@ conectado una bombilla led a cada pin2, pin3 y pin4. En la *figura 6* se mostrar
 ![](markdown_resources/usart_schematic.jpg)
 |:--:|
 |Figura 6|
+
+Para poder compilar `usart.c` o `usart_read.c`, hace falta editar el archivo de compilación correspondiente al sistema
+operativo que se esté usando y modificar la línea con la variable `FILENAME` de la siguiente forma:
+* Makefile:
+```
+FILENAME=usart
+# Si se quiere compilar usart.c
+```
+```
+FILENAME=usart_read
+# Si se quiere compilar usart_read.c
+```
+* make.bat:
+```
+set FILENAME=usart
+:: Si se quiere compilar usart.c
+```
+```
+set FILENAME=usart_read
+:: Si se quiere compilar usart_read.c
+```
 
 ### ADC ###
 La forma que se obtiene un valor analógico es mediante un divisor de voltaje, tal y como se muestra en la *figura 7*. 
