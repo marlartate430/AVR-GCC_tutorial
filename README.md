@@ -27,7 +27,7 @@ make
 
 **Comunicación serie**<br>
 Hay una carpeta, cuyo nombre es `usart`, en la que se encuentran prácticas del puerto serie. El archivo `usart.c`
-trata de transmitir una cadena caracteres constantemente, mientras que `usart_read.c` de leer datos enviados por
+trata de transmitir una cadena de caracteres constantemente, mientras que `usart_read.c` de leer datos enviados por
 el ordenador. Para poder comunicarse por el puerto serie USB desde el PC, se requiere del programa PuTTY en Windows
 y el programa `source` en GNU/Linux. Se explicarán los pasos necesarios para poder establecer la comunicación para
 cada sistema operativo.<br>
@@ -81,8 +81,8 @@ intensidad (de encendido a apagado y de apagado a encendido) cada 5 segundos.
 
 ### PWM ###
 Se vuelve a utilizar el timer0, pero esta vez en su modo PWM. Así, el valor que se le asigne en el registro OCR0A
-se refleja en la intensidad de la luz del led conectado al puerto 6 y el puerto 5 (pines 0C0A y 0C0B respectivamente)
-en función del registro 0CR0B. A continuación se mostrará su circuito en la *figura 5*.
+se refleja en la intensidad de la luz del led conectado al puerto 6 y el puerto 5 (pines OC0A y OC0B respectivamente)
+en función del registro OCR0B. A continuación se mostrará su circuito en la *figura 5*.
 
 ![](markdown_resources/pwm_schematic.jpg)
 |:--:|
@@ -105,7 +105,7 @@ conectado una bombilla led a cada pin2, pin3 y pin4. En la *figura 6* se mostrar
 La forma que se obtiene un valor analógico es mediante un divisor de voltaje, tal y como se muestra en la *figura 7*. 
 El programa trata de una máquina de tres estados. Antes de hablar de los estados, hay que aclarar que se inicializan
 los periféricos y que el adc comienza la conversión al empezar el programa.<br>
-Dicho esto, en el primer estado, se espera  a que el ADC haya terminado; en ese caso se cambia de al siguiente estado.
+Dicho esto, en el primer estado, se espera  a que el ADC haya terminado; en ese caso se cambia del siguiente estado.
 Además, se le cambia de orden al número obtenido, porque el usart va a transferir el número de dígito en dígito desde
 el más pequeño. En cuanto a periféricos, el adc se apaga y se enciende el puerto serie.<br>
 En el segundo, se envía el dato recibido por el conversor mediante el periférico USART0 al ordenador. En el momento que
