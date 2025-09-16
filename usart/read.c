@@ -5,7 +5,6 @@
 
 #define TAMANO_RGB 3
 #define OFFSET_PRIMER_PIN 2
-#define OFFSET_ASCII '0'
 
 /*
  * ENUNCIADO: Se va a enviar desde
@@ -24,7 +23,7 @@ ISR(USART_UDRE_vect)
 }
 
 void inicializar_usart(void);
-void encender_led(const uint8_t p_dato);
+void encender_led(const uint8_t p_dato)
 
 int main(void)
 {
@@ -48,32 +47,21 @@ int main(void)
 
 void encender_led(const uint8_t p_dato)
 {
-	const uint8_t dato_restado = p_dato - OFFSET_ASCII - OFFSET_PRIMER_PIN;
-
+	const uint8_t dato_restado = p_dato - 1;
+	
 	if ( dato_restado < TAMANO_RGB )
 	{
 		for ( uint8_t indice = 0; indice < TAMANO_RGB; indice++ )
 		{
-			uint8_t indice_offset_pin = indice + OFFSET_PRIMER_PIN;
-			
 			if ( dato_restado == indice )
 			{
-				PORTD |= ( 1 << indice_offset_pin );
+				PORTD |= ( 1 << ( indice + OFFSET_PRIMER_PIN ) );
 			}
 			else
 			{
-				PORTD &= ~( 1 << indice_offset_pin );
+				PORTD |= ~( 1 << ( indice + OFFSET_PRIMER_PIN ) );
 			}
 		}
-	}
-	else
-	{
-		PORTD &= ~(0x1C);
-		// 0 0 0 1 _ 1 1 0 0
-
-		/* Negada de los pines que se encendenrian, si se hubieran
-		 * presionado sus teclados correspondientes
-		 */
 	}
 }
 
@@ -122,8 +110,8 @@ void inicializar_usart(void)
 	 * UCPOL0 : 0 => Flancos de bajada.
 	 */
 
-	UCSR0B |= 0x30;
-	// 0 0 1 1 _ 0 0 0 0
+	UCSR0B |= 0x34;
+	// 0 0 1 1 _ 0 1 0 0
 	/*
 	 * RXCIE0 : 0 => Habilitar interrupcion de
 	 * recepcion completada.
@@ -139,13 +127,13 @@ void inicializar_usart(void)
 	 * TXEN0 : 0 => No habilitar la transimision de
 	 * archivos.
 	 *
-	 * UCSZ02 : 0 => Bit de tamaino de transmision/lectura
+	 * UCSZ02 : Bit de tamaino de transmision/lectura
 	 * que se menciona en UCSR0C.
 	 *
-	 * RXB80 : 0 => Noveno bit del dato recivido, en caso de
+	 * RXB80 : Noveno bit del dato recivido, en caso de
 	 * que se vayan a leer mas de 8 bits.
 	 *
-	 * TXB80 : 0 => Noveno bit del dato a enviar, en caso de que
+	 * TXB80 : Noveno bit del dato a enviar, en caso de que
 	 * se vayan a transmitir mas de 8 bits.
 	 */
 }

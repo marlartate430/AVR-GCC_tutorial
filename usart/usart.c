@@ -50,8 +50,8 @@ void power_on_usart(void)
 	
 	UCSR0A |= 0x00;
 
-	UCSR0C |= 0x26;
-	// 0 0 1 0 _ 0 1 1 0
+	UCSR0C |= 0x06;
+	// 0 0 0 0 _ 0 1 1 0
 
 	UCSR0B |= 0x28;
 	// 0 0 1 0 _ 1 0 0 0
