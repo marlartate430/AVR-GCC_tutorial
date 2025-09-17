@@ -137,7 +137,7 @@ int main(void)
 	 * pero sin prescaler.
 	 */ 
 
-	OCR0A = 0x00;
+	OCR0A = 0xFF;
 	/* En cuanto el contador TCNT0 valga 0,
 	 * la seinal OC0A se encendera. Cuando
 	 * el contador llegue al valor maximo,

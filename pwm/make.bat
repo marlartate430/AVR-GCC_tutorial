@@ -1,10 +1,11 @@
 @echo off
 
-set PROGRAMAS=%USERPROFILE%\Desktop\Programas
+set PROGRAMAS=%USERPROFILE%\Desktop\Marco
 set AVR=%PROGRAMAS%\avr8-gnu-toolchain-win32_x86_64\bin
 set AVRDUDE=%PROGRAMAS%\avrdude
 set MICRO_TARGET=atmega328p
 set TIMER=pwm0
+set FILENAME=pwm0
 
 if "%1"=="" (
 	call :object
