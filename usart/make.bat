@@ -4,7 +4,7 @@ set PROGRAMAS=%USERPROFILE%\Desktop\Programas
 set AVR=%PROGRAMAS%\avr8-gnu-toolchain-win32_x86_64\bin
 set AVRDUDE=%PROGRAMAS%\avrdude
 set MICRO_TARGET=atmega328p
-set FILENAME=usart
+set FILENAME=usart_read
 
 if "%1"=="" (
 	call :object
