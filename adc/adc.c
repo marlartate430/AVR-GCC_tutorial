@@ -208,8 +208,8 @@ void apagar_adc(void)
 
 void generador_eventos(void)
 {
-	uint8_t evento_anterior = evento & 0xFC;
-	// 1 1 1 1 _ 1 1 0 0
+	uint8_t evento_anterior = evento & 0xFD;
+	// 1 1 1 1 _ 1 1 0 1
 	/* No se van a tener en cuenta si se repiten las
 	 * interrupciones.
 	 */
